@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="MetadataManager.SettingsPage"
+             xmlns:Strings="clr-namespace:MetadataManager.Resources"
+             xmlns:local="clr-namespace:MetadataManager"
+             x:DataType="local:SettingsViewModel">
+  <ScrollView>
+    <VerticalStackLayout Padding="20,20,20,30" Spacing="20">
+      <VerticalStackLayout.Resources>
+        <Style TargetType="Label" x:Key="ButtonDingsLabelStyle">
+          <Setter Property="FontAttributes" Value="Bold"/>
+          <Setter Property="FontSize" Value="Title"/>
+          <Setter Property="Margin" Value="0,-10,0,0"/>
+          <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
+          <Setter Property="HorizontalTextAlignment" Value="End"/>
+        </Style>
+      </VerticalStackLayout.Resources>
+      <VerticalStackLayout>
+        <Label Text="{x:Static Strings:AppResources.MainFolder}" Margin="0,0,0,10"/>
+        <SearchBar Text="{Binding OGLocalPath, Mode=TwoWay}" SearchCommand="{Binding PickNewOGLocalPathCommand}" HorizontalOptions="Fill"/>
+      </VerticalStackLayout>
+
+      <HorizontalStackLayout HorizontalOptions="End">
+        <Label Text="{x:Static Strings:AppResources.MainFormat}" VerticalOptions="Center"/>
+        <Picker SelectedItem="{Binding OGMetadataVersion, Mode=TwoWay}" ItemsSource="{Binding Media.MetadataVersionList}" WidthRequest="150" Margin="20,0,0,0"/>
+      </HorizontalStackLayout>
+      
+      <HorizontalStackLayout HorizontalOptions="End">
+        <Label Text="{x:Static Strings:AppResources.MainLanguage}" VerticalOptions="Center"/>
+        <Picker SelectedItem="{Binding OGLanguage, Mode=TwoWay}" ItemsSource="{Binding Media.LanguageList}" WidthRequest="150" Margin="20,0,0,0"/>
+      </HorizontalStackLayout>
+    </VerticalStackLayout>
+  </ScrollView>
+</ContentPage>

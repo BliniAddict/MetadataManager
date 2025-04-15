@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="MetadataManager.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:MetadataManager"
+    xmlns:Strings="clr-namespace:MetadataManager.Resources"
+    Shell.FlyoutBehavior="Flyout" Title="MetadataManager" Shell.NavBarIsVisible="False">
+  <TabBar>    
+  <ShellContent
+        Title="{x:Static Strings:AppResources.MainPageTitle}"
+        ContentTemplate="{DataTemplate local:MainPage}"
+        Route="MainPage"/>
+  <ShellContent
+        Title="{x:Static Strings:AppResources.SettingsPageTitle}"
+        ContentTemplate="{DataTemplate local:SettingsPage}"
+        Route="SettingsPage"/>
+  </TabBar>
+</Shell>

@@ -1,0 +1,149 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:Strings="clr-namespace:MetadataManager.Resources"
+             xmlns:local="clr-namespace:MetadataManager"
+             x:Class="MetadataManager.MainPage">
+  <ContentPage.Resources>
+    <local:FileNameConverter x:Key="FileNameConverter"/>
+    <local:DiverseDataConverter x:Key="DiverseDataConverter"/>
+  </ContentPage.Resources>
+
+  <FlexLayout x:Name="MainFlexLayout"
+              Direction="Row"
+              Padding="25,0"
+              Margin="0,15,0,20">
+
+    <Grid x:Name="LeftHalfGrid" FlexLayout.Basis="45%">
+      <Grid.RowDefinitions>
+        <RowDefinition/>
+        <RowDefinition Height="Auto"/>
+      </Grid.RowDefinitions>
+      <ScrollView Orientation="Vertical" WidthRequest="{Binding Source={x:Reference LeftHalfGrid}, Path=Width}">
+        <StackLayout Orientation="Vertical" Spacing="10">
+          <Border StrokeThickness="4" HorizontalOptions="Start" MinimumWidthRequest="200">
+            <Border.Triggers>
+              <DataTrigger TargetType="Border" Binding="{Binding ChangableFile.IsVideo}" Value="True">
+                <Setter Property="IsVisible" Value="False"/>
+              </DataTrigger>
+            </Border.Triggers>
+            <Grid>
+              <ImageButton x:Name="CoverImageButton" Source="{Binding ChangableFile.Cover, Mode=TwoWay}" Command="{Binding PickDifferentCoverCommand}" 
+                         Aspect="AspectFit" HeightRequest="200" MinimumWidthRequest="200" HorizontalOptions="Start"/>
+              <Button Command="{Binding RemoveCoverCommand}"
+                      Text="x" FontSize="Title" FontAttributes="Bold" TextColor="White" Opacity="0.5"
+                      CornerRadius="2" Margin="-10,-10" Padding="-6,3,0,0"
+                      VerticalOptions="Start" HorizontalOptions="End"/>
+              <Button Command="{Binding SaveCoverLocallyCommand}"
+                      Text="&#x2913;" FontSize="Subtitle" FontAttributes="Bold" TextColor="White" Opacity="0.5"
+                      CornerRadius="2" Margin="-10,-10" Padding="0,8,-6,0"
+                      VerticalOptions="Start" HorizontalOptions="Start"/>
+            </Grid>
+          </Border>
+          <toolkit:MediaElement Source="{Binding ChangableFile.FullFilePath}" x:Name="MediaPlayer"  
+                                WidthRequest="{Binding Source={x:Reference LeftHalfGrid}, Path=Width}"  HorizontalOptions="Start"/>
+
+          <local:CustomEntry x:Name="FileNameEntry" LabelText="{x:Static Strings:AppResources.ManagingFileName}"
+                             EntryText="{Binding ChangableFile.FileName, Mode=TwoWay, Converter={StaticResource FileNameConverter}}"/>
+          <local:CustomEntry LabelText="{x:Static Strings:AppResources.ManagingTitle}" EntryText="{Binding ChangableFile.Title, Mode=TwoWay}" 
+                             IsInfoButtonVisible="{Binding ChangableFile.Title, Converter={StaticResource DiverseDataConverter}}"/>
+          <local:CustomEntry LabelText="{x:Static Strings:AppResources.ManagingArtist}" EntryText="{Binding ChangableFile.Artist, Mode=TwoWay}" 
+                             IsInfoButtonVisible="{Binding ChangableFile.Artist, Converter={StaticResource DiverseDataConverter}}"/>
+          <local:CustomEntry LabelText="Album" EntryText="{Binding ChangableFile.Album, Mode=TwoWay}" 
+                             IsInfoButtonVisible="{Binding ChangableFile.Album, Converter={StaticResource DiverseDataConverter}}"/>
+          <local:CustomEntry LabelText="{x:Static Strings:AppResources.ManagingAlbumArtist}" EntryText="{Binding ChangableFile.AlbumArtist, Mode=TwoWay}" 
+                             IsInfoButtonVisible="{Binding ChangableFile.AlbumArtist, Converter={StaticResource DiverseDataConverter}}"/>
+          <local:CustomEntry LabelText="Genre" EntryText="{Binding ChangableFile.Genre, Mode=TwoWay}" 
+                             IsInfoButtonVisible="{Binding ChangableFile.Genre, Converter={StaticResource DiverseDataConverter}}"/>
+
+          <Grid ColumnSpacing="10" RowSpacing="10">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition/>
+              <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <local:CustomEntry LabelText="{x:Static Strings:AppResources.ManagingYear}" EntryText="{Binding ChangableFile.Year, Mode=TwoWay}" 
+                             IsInfoButtonVisible="{Binding ChangableFile.Year, Converter={StaticResource DiverseDataConverter}}"/>
+            <local:CustomEntry LabelText="{x:Static Strings:AppResources.ManagingTitleNumber}" EntryText="{Binding ChangableFile.TitleNumber, Mode=TwoWay}" 
+                             IsInfoButtonVisible="{Binding ChangableFile.TitleNumber, Converter={StaticResource DiverseDataConverter}}" Grid.Column="1"/>
+          </Grid>
+
+          <Grid ColumnSpacing="10" RowSpacing="10" >
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition/>
+              <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Button Command="{Binding ConvertVideoToMP3Command}" Text="{x:Static Strings:AppResources.ManagingConvertToMp3}" IsEnabled="False" VerticalOptions="End">
+              <Button.Triggers>
+                <DataTrigger TargetType="Button" Binding="{Binding ChangableFile.IsVideo}" Value="True">
+                  <Setter Property="IsEnabled" Value="True"/>
+                </DataTrigger>
+              </Button.Triggers>
+            </Button>
+            <local:CustomEntry LabelText="{x:Static Strings:AppResources.ManagingCDNumber}" EntryText="{Binding ChangableFile.CDNumber, Mode=TwoWay}" 
+                             IsInfoButtonVisible="{Binding ChangableFile.CDNumber, Converter={StaticResource DiverseDataConverter}}" Grid.Column="1"/>
+          </Grid>
+        </StackLayout>
+      </ScrollView>
+
+      <StackLayout Orientation="Horizontal" Grid.Row="1" Margin="0,15,0,-10" Spacing="15">
+        <Button Text="{x:Static Strings:AppResources.ManagingDelete}" IsEnabled="{Binding IsSavable}" Command="{Binding DeleteFilesCommand}" HorizontalOptions="FillAndExpand"/>
+        <Button Text="{x:Static Strings:AppResources.ManagingSave}" IsEnabled="{Binding IsSavable}" Command="{Binding SaveChangesCommand}" HorizontalOptions="FillAndExpand"/>
+      </StackLayout>
+    </Grid>
+
+    <FlexLayout x:Name="RightHalfLayout" FlexLayout.Basis="55%" Direction="Column" Margin="10,0,0,0">
+      <SearchBar x:Name="MainViewSearchBar" Text="{Binding TempPath, Mode=TwoWay}" SearchCommand="{Binding PickLocalPathCommand}"
+                 HorizontalOptions="Fill" FlexLayout.Shrink="0"/>
+
+      <Grid x:Name="CollectionGrid" FlexLayout.Grow="1" HorizontalOptions="Fill" WidthRequest="{Binding Source={x:Reference RightHalfLayout}, Path=Width}">
+        <CollectionView x:Name="FilesCollection" ItemsSource="{Binding GroupedFilesList, Mode=TwoWay}" IsGrouped="True" ItemsLayout="VerticalList"
+                        SelectionMode="Multiple" SelectedItems="{Binding SelectedFiles}" SelectionChangedCommand="{Binding FileSelectionChangedCommand}"
+                        HeightRequest="{Binding Source={x:Reference CollectionGrid}, Path=Height}" >
+          <CollectionView.ItemTemplate>
+            <DataTemplate x:DataType="{x:Type local:MediaFile}">
+              <VerticalStackLayout Padding="15,0,0,0">
+                <HorizontalStackLayout>
+                  <Label Text="{Binding FileName}" FontSize="Subtitle"/>
+                  <Label Text="🎵">
+                    <Label.Triggers>
+                      <DataTrigger TargetType="Label" Binding="{Binding IsVideo}" Value="True">
+                        <Setter Property="Text" Value="📼"/>
+                      </DataTrigger>
+                    </Label.Triggers>
+                  </Label>
+                </HorizontalStackLayout>
+                <HorizontalStackLayout>
+                  <Label Text="{Binding Title}"/>
+                  <Label Text="|"/>
+                  <Label Text="{Binding Artist}"/>
+                  <Label Text="|"/>
+                  <Label Text="{Binding Album}"/>
+                </HorizontalStackLayout>
+              </VerticalStackLayout>
+            </DataTemplate>
+          </CollectionView.ItemTemplate>
+
+          <CollectionView.GroupHeaderTemplate>
+            <DataTemplate x:DataType="{x:Type local:Group`1}">
+              <HorizontalStackLayout>
+                <Label Text="{Binding FirstTitle}" FontSize="Title" FontAttributes="Bold"/>
+                <HorizontalStackLayout.GestureRecognizers>
+                  <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type local:MainViewModel}}, Path=SelectGroupCommand}" 
+                                        CommandParameter="{Binding}"/>
+                </HorizontalStackLayout.GestureRecognizers>
+              </HorizontalStackLayout>
+            </DataTemplate>
+          </CollectionView.GroupHeaderTemplate>
+        </CollectionView>
+
+        <StackLayout Orientation="Horizontal" VerticalOptions="Start" HorizontalOptions="End" ZIndex="1">
+          <local:CustomizableSwitch IsToggled="{Binding IsGroupingByAlbum}" OnText="{x:Static Strings:AppResources.ManagingAlbumGroup}"
+                                    OffText="{x:Static Strings:AppResources.ManagingArtistGroup}" Margin="0,0,10,0"/>
+          <Button Command="{Binding ReloadFilesCommand}" Text="{x:Static Strings:AppResources.ManagingReload}"  HeightRequest="10"/>
+          <Button Command="{Binding ClearSelectedFilesCommand}" Text="{x:Static Strings:AppResources.ManagingEmptySelection}" IsEnabled="False" x:Name="ClearSelectionButton" HeightRequest="10"/>
+        </StackLayout>
+      </Grid>
+    </FlexLayout>
+  </FlexLayout>
+</ContentPage>
