@@ -105,17 +105,6 @@ namespace MetadataManager
         uniquePath = isFolder ? $"{basePath}({index})" : $"{pathWithoutExt}({index}).{container}";
         index++;
       }
-
-
-      uniquePath = uniquePath.Replace("<", "");
-      uniquePath = uniquePath.Replace(">", "");
-      uniquePath = uniquePath.Replace(":", "");
-      uniquePath = uniquePath.Replace("\"", "");
-      uniquePath = uniquePath.Replace("/", "");
-      uniquePath = uniquePath.Replace("\\", "");
-      uniquePath = uniquePath.Replace("|", "");
-      uniquePath = uniquePath.Replace("?", "");
-      uniquePath = uniquePath.Replace("*", "");
       return uniquePath;
     }
     #endregion

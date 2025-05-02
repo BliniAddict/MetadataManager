@@ -241,8 +241,9 @@ namespace MetadataManager
       if (shouldReloadFiles)
         GetAllFiles();
 
-      Group<MediaFile> lastSelectedArtist = GroupedFilesList.Last(a => !IsGroupingByAlbum ? a.FirstTitle == files.Last().AlbumArtist : a.FirstTitle == files.Last().Album);
-      ScrollToItemRequested?.Invoke(lastSelectedArtist, lastSelectedFile);
+        Group<MediaFile>? lastSelectedArtist = GroupedFilesList.LastOrDefault(a => !IsGroupingByAlbum ? a.FirstTitle == files.Last().AlbumArtist : a.FirstTitle == files.Last().Album);
+        if (lastSelectedArtist != null)
+          ScrollToItemRequested?.Invoke(lastSelectedArtist, lastSelectedFile);
 
       if (files.Count > 2)
       {
