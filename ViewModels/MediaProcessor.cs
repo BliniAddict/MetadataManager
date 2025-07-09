@@ -69,7 +69,7 @@ namespace MetadataManager
       if (result.IsSuccessful)
         return result.Folder.Path;
 
-      return null;
+      return LocalPath;
     }
     #endregion
 

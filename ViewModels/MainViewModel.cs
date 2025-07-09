@@ -238,13 +238,6 @@ namespace MetadataManager
       }
       ChangableFile = null;
 
-      if (shouldReloadFiles)
-        GetAllFiles();
-
-        Group<MediaFile>? lastSelectedArtist = GroupedFilesList.LastOrDefault(a => !IsGroupingByAlbum ? a.FirstTitle == files.Last().AlbumArtist : a.FirstTitle == files.Last().Album);
-        if (lastSelectedArtist != null)
-          ScrollToItemRequested?.Invoke(lastSelectedArtist, lastSelectedFile);
-
       if (files.Count > 2)
       {
         var currentShell = Shell.Current;
@@ -256,6 +249,14 @@ namespace MetadataManager
           await Shell.Current.GoToAsync(currentRoute);
         }
       }
+
+      if (shouldReloadFiles)
+        GetAllFiles();
+
+      Group<MediaFile>? lastSelectedArtist = GroupedFilesList.LastOrDefault(a => !IsGroupingByAlbum ? a.FirstTitle == changes.AlbumArtist
+                                                                                                      : a.FirstTitle == changes.Album);
+      if (lastSelectedArtist != null)
+          ScrollToItemRequested?.Invoke(lastSelectedArtist, lastSelectedFile);
 
       _toast = Toast.Make(string.Format(AppResources.ChangesSavedManagement, files.Count), ToastDuration.Short);
       _toast.Show(CancellationToken.None);
